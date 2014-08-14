@@ -2,7 +2,7 @@
 // bot_procedural.js
 // hifi
 //
-// Created by Ben Arnold on 7/29/2013
+// Created by Ben Arnold on 7/29/2014
 //
 // Copyright (c) 2014 HighFidelity, Inc. All rights reserved.
 //
@@ -60,11 +60,7 @@ var targetPosition =  { x: 0, y: 0, z: 0 };
 var targetOrientation = { x: 0, y: 0, z: 0, w: 0 };
 var currentOrientation = { x: 0, y: 0, z: 0, w: 0 };
 var targetHeadPitch = 0.0;
-var targetHeadYaw = 0.0;
-
-var basePelvisHeight = 0.0;
-var pelvisOscillatorPosition = 0.0;
-var pelvisOscillatorVelocity = 0.0;
+var targetHeadYaw = 0.0
 
 function clamp(val, min, max){
     return Math.max(min, Math.min(max, val))
@@ -91,7 +87,6 @@ Agent.isListeningToAudioStream = true;
 
 // change the avatar's position to the random one
 Avatar.position = firstPosition;  
-basePelvisHeight = firstPosition.y; 
 printVector("New dancer, position = ", Avatar.position);
 
 function loadSounds() {
@@ -533,28 +528,6 @@ function handleAnimation(deltaTime) {
     }
 }
 
-function jumpWithLoudness(deltaTime) {
-    // potentially change pelvis height depending on trailing average loudness
-
-    pelvisOscillatorVelocity += deltaTime * Agent.lastReceivedAudioLoudness * 700.0 ;
-
-    pelvisOscillatorVelocity -= pelvisOscillatorPosition * 0.75;
-    pelvisOscillatorVelocity *= 0.97;
-    pelvisOscillatorPosition += deltaTime * pelvisOscillatorVelocity;
-    Avatar.headPitch = pelvisOscillatorPosition * 60.0;
-
-    var pelvisPosition = Avatar.position;
-    pelvisPosition.y = (Y_PELVIS - 0.35) + pelvisOscillatorPosition;
-
-    if (pelvisPosition.y < Y_PELVIS) {
-        pelvisPosition.y = Y_PELVIS;
-    } else if (pelvisPosition.y > Y_PELVIS + 1.0) {
-        pelvisPosition.y = Y_PELVIS + 1.0;
-    }
-
-    Avatar.position = pelvisPosition;
-}
-
 var forcedMove = false;
 
 var wasMovingLastFrame = false;
@@ -658,9 +631,6 @@ function updateBehavior(deltaTime) {
         if (wasMovingLastFrame) {
             isMoving = false;
         }
-
-        // we have a DJ, shouldn't we be dancing?
-        jumpWithLoudness(deltaTime);
     } else {
 
         // no DJ, let's just chill on the dancefloor - randomly walking and talking

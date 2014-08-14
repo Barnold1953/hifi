@@ -34,6 +34,7 @@ class MyAvatar : public Avatar {
     Q_PROPERTY(bool shouldRenderLocally READ getShouldRenderLocally WRITE setShouldRenderLocally)
     Q_PROPERTY(quint32 motionBehaviors READ getMotionBehaviorsForScript WRITE setMotionBehaviorsByScript)
     Q_PROPERTY(glm::vec3 gravity READ getGravity WRITE setLocalGravity)
+    Q_PROPERTY(glm::vec3 velocity READ getVelocity WRITE setVelocity)
 
 public:
 	MyAvatar();
@@ -62,6 +63,7 @@ public:
     float getLeanScale() const { return _leanScale; }
     const glm::vec3& getMouseRayOrigin() const { return _mouseRayOrigin; }
     const glm::vec3& getMouseRayDirection() const { return _mouseRayDirection; }
+    const glm::vec3& getVelocity() const { return _velocity; }
     glm::vec3 getGravity() const { return _gravity; }
     glm::vec3 getUprightHeadPosition() const;
     bool getShouldRenderLocally() const { return _shouldRender; }
